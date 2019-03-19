@@ -19,13 +19,14 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
     private int SIGN_IN_REQUEST_CODE=10;
     private FirebaseListAdapter<ChatMessage> adapter;
-
+    private DatabaseReference mFirebaseDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 // of ChatMessage to the Firebase database
                 FirebaseDatabase.getInstance()
                         .getReference()
+                        .child("groups").child("Ghat")
                         .push()
                         .setValue(new ChatMessage(input.getText().toString(),
                                 FirebaseAuth.getInstance()
@@ -51,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
                                         .getDisplayName())
                         );
 
+
+               /* ChatMessage chatmsg = new
+                        ChatMessage(input.getText().toString(),
+                        FirebaseAuth.getInstance()
+                                .getCurrentUser()
+                                .getDisplayName());
+                mFirebaseDatabaseReference.child("groups")
+                        .push().setValue(chatmsg); */
                 // Clear the input
                 input.setText("");
             }
