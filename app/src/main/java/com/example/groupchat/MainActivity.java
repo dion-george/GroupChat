@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
                 // of ChatMessage to the Firebase database
                 FirebaseDatabase.getInstance()
                         .getReference()
-                        .child("groups").child("Ghat")
+                        .child("groups")
+                        .child("Ghat")
                         .push()
                         .setValue(new ChatMessage(input.getText().toString(),
                                 FirebaseAuth.getInstance()
@@ -91,9 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayChatMessages() {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
-
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("groups").child("Ghat");
+        Log.w("This is ref",mFirebaseDatabaseReference.toString());
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-                R.layout.messages, FirebaseDatabase.getInstance().getReference()) {
+                R.layout.messages, mFirebaseDatabaseReference) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 // Get references to the views of message.xml
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         listOfMessages.setAdapter(adapter);
-
+        Log.w("End of disp","hrrfhr");
     }
 
     @Override
